@@ -1,0 +1,189 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* Fondo oscuro */
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra todo el contenido */
+}
+
+header {
+    background-color: #333;
+    padding: 15px;
+    width: 100%;
+    text-align: center;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    list-style: none;
+    padding: 0;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+nav a:hover {
+    color: #f0f0f0;
+}
+
+/* Banner de contenido */
+#banner {
+    background-color: #222;
+    padding: 60px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+#video-player {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+#categories {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 900px;
+}
+
+button {
+    padding: 15px 30px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Sección de películas */
+#movies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 40px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.movie-card {
+    background-color: #222;
+    border-radius: 10px;
+    width: 250px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+}
+
+.movie-card img {
+    width: 100%;
+    height: auto; /* Asegura que las imágenes mantengan su proporción */
+}
+
+.movie-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.movie-info h3 {
+    font-size: 18px;
+    color: #fff;
+}
+
+.movie-info a {
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.movie-info a:hover {
+    background-color: #0056b3;
+}
+
+/* Panel lateral de perfiles */
+#profiles {
+    position: fixed;
+    top: 100px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    width: 200px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Chat en vivo */
+#chat {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    width: 350px;
+    height: 400px;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-box {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    background-color: #222;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#chat-box .message {
+    background-color: #444;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+#chat-input {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+}
