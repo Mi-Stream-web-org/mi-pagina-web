@@ -120,4 +120,87 @@ document.addEventListener('DOMContentLoaded', () => {
         const videoURL = card.getAttribute('data-video-url');
         
         // Selecciona todos los botones que tengan data-action="play"
-        const play
+        const playButtons = card.querySelectorAll('[data-action="play"]'); 
+        
+        playButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita que el clic afecte al contenedor de la tarjeta
+                
+                if (videoURL) {
+                    // Abre el video en una nueva pestaña/ventana
+                    window.open(videoURL, '_blank'); 
+                } else {
+                    alert('Error: La URL del video no está definida para esta película.');
+                }
+            });
+        });
+        
+        // Manejo del botón 'Mi lista'
+        const addToListButton = card.querySelector('.btn:not([data-action="play"])');
+        if (addToListButton && addToListButton.textContent.includes('Mi lista')) {
+            addToListButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Intenta obtener el título de h3 o h4
+                const titleElement = card.querySelector('h3, h4');
+                const title = titleElement ? titleElement.textContent : "Contenido Desconocido";
+
+                alert(`"${title}" agregado a tu lista.`);
+            });
+        }
+    });
+
+
+    // === 2. Lógica de Búsqueda ===
+
+    const inputBusqueda = document.getElementById('search-input'); 
+    const contenedorPeliculas = secciones['#peliculas']; 
+    const todasLasTarjetas = document.querySelectorAll('.movie-card');
+    const searchButton = document.getElementById('search-button');
+
+    function filtrarPeliculas() {
+        const textoBusqueda = inputBusqueda.value.toLowerCase().trim();
+
+        if (textoBusqueda.length > 0) {
+            // 1. Cambiar a la vista de Películas/Búsqueda
+            cambiarVista('#peliculas'); 
+            
+            // 2. Asegurar que el contenedor de la cuadrícula de #peliculas esté en modo grid
+            const moviesGrid = contenedorPeliculas.querySelector('.movies-grid');
+            if (moviesGrid) moviesGrid.style.display = 'grid'; 
+
+            // 3. Filtrar las tarjetas
+            let resultadosEncontrados = false;
+            todasLasTarjetas.forEach(tarjeta => {
+                const tituloElemento = tarjeta.querySelector('h3, h4'); 
+                if (!tituloElemento) return; 
+
+                const tituloPelicula = tituloElemento.textContent.toLowerCase();
+
+                if (tituloPelicula.includes(textoBusqueda)) {
+                    tarjeta.style.display = 'block'; 
+                    resultadosEncontrados = true;
+                } else {
+                    tarjeta.style.display = 'none';
+                }
+            });
+
+        } else {
+            // Si el campo de búsqueda está vacío, volvemos a la vista de inicio
+            cambiarVista('#inicio');
+            
+            // Restaurar la visualización normal de todas las tarjetas
+            todasLasTarjetas.forEach(tarjeta => tarjeta.style.display = 'block');
+        }
+    }
+
+    // Asignamos el evento al input (búsqueda en tiempo real)
+    inputBusqueda.addEventListener('input', filtrarPeliculas);
+    
+    // Asignamos el evento al botón de búsqueda
+    if (searchButton) {
+        searchButton.addEventListener('click', (e) => {
+             e.preventDefault(); // Detener el submit
+             filtrarPeliculas();
+        });
+    }
+});
