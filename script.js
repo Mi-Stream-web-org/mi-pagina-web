@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === FUNCIONES AUXILIARES NECESARIAS PARA LA NAVEGACIÓN ===
     
-    // Función auxiliar para buscar la fila por el título H2 (crucial para la navegación a 'Series')
     function findRowByTitle(title) {
         const rows = document.querySelectorAll('.content-row');
         for (const row of rows) {
@@ -14,19 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
 
-    // 1.2 Obtener todas las secciones principales por su ID
     const secciones = {
         '#inicio': document.getElementById('inicio'),
         '#peliculas': document.getElementById('peliculas'),
         '#documentales': document.getElementById('documentales'),
     };
     
-    // Función para cambiar de vista (muestra la sección solicitada y oculta las demás)
     function cambiarVista(idVistaAMostrar) {
         
-        const contentRows = document.querySelectorAll('.content-row'); // Todas las filas horizontales
+        const contentRows = document.querySelectorAll('.content-row'); 
 
-        // 1. Ocultar todas las secciones principales de navegación (banner, cuadrículas)
+        // 1. Ocultar todas las secciones principales
         for (const id in secciones) {
             const seccion = secciones[id];
             if (seccion) {
@@ -37,16 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Ocultar todas las filas de contenido por defecto
         contentRows.forEach(row => row.style.display = 'none');
         
-        // 3. Control de visibilidad de la sección y las Filas de Contenido
+        // 3. Control de visibilidad
         
         if (idVistaAMostrar === '#inicio') {
-            // En Inicio, mostramos el banner y todas las filas de contenido.
             document.getElementById('inicio').style.display = 'block';
-            contentRows.forEach(row => row.style.display = 'block');
+            contentRows.forEach(row => row.style.display = 'block'); // Muestra todas las filas en Inicio
             
         } else if (idVistaAMostrar === '#series') {
-            
-            // CORRECCIÓN: SOLO mostramos la fila específica de series
             const seriesRow = findRowByTitle('Series épicas');
             if (seriesRow) {
                 seriesRow.style.display = 'block';
@@ -54,12 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
         } else if (idVistaAMostrar === '#peliculas') {
             
-            document.getElementById('peliculas').style.display = 'block'; // Muestra la cuadrícula
+            document.getElementById('peliculas').style.display = 'block'; // Muestra la cuadrícula de Películas
             
-            // Opcional: Mostrar la fila de 'Tendencias' en la vista de Películas también
+            // Para la vista Películas, puedes optar por mostrar solo la cuadrícula o añadir filas específicas:
             const tendenciasRow = findRowByTitle('Tendencias ahora');
             if (tendenciasRow) {
-                tendenciasRow.style.display = 'block';
+                 // **IMPORTANTE:** Si no quieres ver las filas en la vista Películas, cambia 'block' por 'none'.
+                 // Dejaré 'block' para que la búsqueda pueda usar todas las tarjetas si lo necesitas.
+                 tendenciasRow.style.display = 'block'; 
             }
             
         } else if (idVistaAMostrar === '#documentales') {
@@ -67,15 +63,15 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('documentales').style.display = 'block'; 
             
         } else {
-            // Caso de fallback o búsqueda, mostrar la cuadrícula de películas
-            document.getElementById('peliculas').style.display = 'block';
+            // Caso de búsqueda
+            document.getElementById('peliculas').style.display = 'block'; 
+            contentRows.forEach(row => row.style.display = 'block'); // Muestra filas para que la búsqueda funcione en ellas
         }
 
         // Restaura todas las tarjetas a 'block' para que el filtro de búsqueda no persista
         document.querySelectorAll('.movie-card').forEach(tarjeta => tarjeta.style.display = 'block');
     }
 
-    // Ocultar todas las secciones al inicio, excepto #inicio (el banner hero)
     cambiarVista('#inicio');
 
 
@@ -88,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (idObjetivo && idObjetivo.startsWith('#')) {
                 e.preventDefault(); 
                 cambiarVista(idObjetivo);
-                // Limpia la búsqueda si navegas
                 document.getElementById('search-input').value = '';
             }
         });
@@ -99,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnInfo = document.querySelector('.btn-info');
     
     if (btnPlayBanner) {
-        // CORRECCIÓN DE SINTAXIS: Se completa la función del botón Play
         btnPlayBanner.addEventListener('click', () => {
             window.open('peliculas/moana.mp4', '_blank'); 
         });
@@ -144,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === 2. Lógica de Búsqueda ===
 
     const inputBusqueda = document.getElementById('search-input'); 
-    const todasLasTarjetas = document.querySelectorAll('.movie-card');
+    const todasLasTarjetas = document.querySelectorAll('.movie-card'); // Lista de todas las tarjetas
     const searchButton = document.getElementById('search-button');
 
     function filtrarPeliculas() {
@@ -152,11 +146,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (textoBusqueda.length > 0) {
             
-            // 1. Navegar a la vista de Películas/Búsqueda 
-            cambiarVista('#peliculas'); 
+            // 1. Prepara la vista para la búsqueda
+            // Muestra #peliculas y todas las filas, permitiendo que el filtro oculte lo que no coincide.
+            cambiarVista('BUSQUEDA'); // Usamos una cadena especial para el modo búsqueda
             
             // 2. Filtrar las tarjetas
             todasLasTarjetas.forEach(tarjeta => {
+                // Obtiene el título de la tarjeta (en tu HTML es un <h4>)
                 const tituloElemento = tarjeta.querySelector('h3, h4'); 
                 if (!tituloElemento) return; 
 
