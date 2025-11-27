@@ -7,6 +7,11 @@ const inicioSection = document.getElementById('inicio');
 const peliculasSection = document.getElementById('peliculas');
 
 // Función para mostrar solo la sección de inicio
+// Función para mostrar las películas
+function showMovies() {
+    const peliculasContent = document.getElementById("peliculas-content");
+    peliculasContent.style.display = "block"; // Muestra el contenido de Películas
+}
 function showInicio() {
     inicioSection.style.display = 'block';
     peliculasSection.style.display = 'none';
@@ -29,5 +34,7 @@ peliculasLink.addEventListener('click', function(e) {
     showPeliculas();
 });
 
+
 // Mostrar la sección de inicio por defecto cuando se cargue la página
 showInicio();
+
