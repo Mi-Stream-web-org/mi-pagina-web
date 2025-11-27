@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const rows = document.querySelectorAll('.content-row');
         for (const row of rows) {
             const h2 = row.querySelector('h2');
-            // Nota: Usamos .trim() para asegurar que no haya espacios extra en el título
             if (h2 && h2.textContent.trim() === title) {
                 return row;
             }
@@ -60,14 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             document.getElementById('peliculas').style.display = 'block'; // Muestra la cuadrícula
             
-            // Ocultamos todas las filas horizontales (excepto las que ya están en la cuadrícula)
+            // Ocultamos todas las filas horizontales
             contentRows.forEach(row => row.style.display = 'none');
-            
-            // Opcional: Si quieres que la fila de "Tendencias ahora" aparezca también aquí:
-            // const tendenciasRow = findRowByTitle('Tendencias ahora');
-            // if (tendenciasRow) {
-            //     tendenciasRow.style.display = 'block';
-            // }
             
         } else if (idVistaAMostrar === '#documentales') {
             
@@ -77,6 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Caso de fallback o búsqueda
             document.getElementById('peliculas').style.display = 'block';
+        }
+
+        // Si se llama desde la búsqueda, restauramos todas las tarjetas a 'block' antes de filtrar
+        if (idVistaAMostrar !== '#inicio') {
+             document.querySelectorAll('.movie-card').forEach(tarjeta => tarjeta.style.display = 'block');
         }
     }
 
@@ -93,6 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (idObjetivo && idObjetivo.startsWith('#')) {
                 e.preventDefault(); 
                 cambiarVista(idObjetivo);
+                // Limpia la búsqueda si navegas
+                document.getElementById('search-input').value = '';
             }
         });
     });
@@ -124,10 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         playButtons.forEach(button => {
             button.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita que el clic afecte al contenedor de la tarjeta
+                e.stopPropagation(); 
                 
                 if (videoURL) {
-                    // Abre el video en una nueva pestaña/ventana
                     window.open(videoURL, '_blank'); 
                 } else {
                     alert('Error: La URL del video no está definida para esta película.');
@@ -140,17 +139,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (addToListButton && addToListButton.textContent.includes('Mi lista')) {
             addToListButton.addEventListener('click', (e) => {
                 e.stopPropagation();
-                // Intenta obtener el título de h3 o h4
                 const titleElement = card.querySelector('h3, h4');
                 const title = titleElement ? titleElement.textContent : "Contenido Desconocido";
-
                 alert(`"${title}" agregado a tu lista.`);
             });
         }
     });
 
 
-    // === 2. Lógica de Búsqueda ===
+    // === 2. Lógica de Búsqueda (SIMPLIFICADA Y MÁS ESTABLE) ===
 
     const inputBusqueda = document.getElementById('search-input'); 
     const contenedorPeliculas = secciones['#peliculas']; 
@@ -161,15 +158,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const textoBusqueda = inputBusqueda.value.toLowerCase().trim();
 
         if (textoBusqueda.length > 0) {
-            // 1. Cambiar a la vista de Películas/Búsqueda
+            // 1. Mostrar la sección de Películas (la cuadrícula) y ocultar las filas de contenido
             cambiarVista('#peliculas'); 
             
-            // 2. Asegurar que el contenedor de la cuadrícula de #peliculas esté en modo grid
-            const moviesGrid = contenedorPeliculas.querySelector('.movies-grid');
-            if (moviesGrid) moviesGrid.style.display = 'grid'; 
-
-            // 3. Filtrar las tarjetas
-            let resultadosEncontrados = false;
+            // 2. Filtrar las tarjetas
             todasLasTarjetas.forEach(tarjeta => {
                 const tituloElemento = tarjeta.querySelector('h3, h4'); 
                 if (!tituloElemento) return; 
@@ -178,7 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (tituloPelicula.includes(textoBusqueda)) {
                     tarjeta.style.display = 'block'; 
-                    resultadosEncontrados = true;
                 } else {
                     tarjeta.style.display = 'none';
                 }
@@ -187,9 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // Si el campo de búsqueda está vacío, volvemos a la vista de inicio
             cambiarVista('#inicio');
-            
-            // Restaurar la visualización normal de todas las tarjetas
-            todasLasTarjetas.forEach(tarjeta => tarjeta.style.display = 'block');
         }
     }
 
@@ -199,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Asignamos el evento al botón de búsqueda
     if (searchButton) {
         searchButton.addEventListener('click', (e) => {
-             e.preventDefault(); // Detener el submit
+             e.preventDefault(); 
              filtrarPeliculas();
         });
     }
