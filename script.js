@@ -15,10 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 1.2 Obtener todas las secciones principales por su ID
+    // NOTA: Se ha quitado la referencia a '#series' ya que la eliminamos del HTML
     const secciones = {
         '#inicio': document.getElementById('inicio'),
         '#peliculas': document.getElementById('peliculas'),
-        '#series': document.getElementById('series'),
         '#documentales': document.getElementById('documentales'),
     };
     
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const contentRows = document.querySelectorAll('.content-row'); // Todas las filas horizontales
 
-        // 1. Ocultar todas las secciones principales y de navegación
+        // 1. Ocultar todas las secciones principales de navegación (banner, cuadrículas)
         for (const id in secciones) {
             const seccion = secciones[id];
             if (seccion) {
@@ -35,21 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 2. Control de visibilidad de las Filas de Contenido y Secciones
+        // 2. Ocultar todas las filas de contenido por defecto
+        contentRows.forEach(row => row.style.display = 'none');
+        
+        // 3. Control de visibilidad de la sección y las Filas de Contenido
         
         if (idVistaAMostrar === '#inicio') {
-            // En Inicio, mostramos todas las filas horizontales
+            // En Inicio, mostramos el banner y todas las filas de contenido.
             document.getElementById('inicio').style.display = 'block';
             contentRows.forEach(row => row.style.display = 'block');
             
         } else if (idVistaAMostrar === '#series') {
             
-            document.getElementById('series').style.display = 'block'; 
-            
-            // Ocultamos todas las filas horizontales primero
-            contentRows.forEach(row => row.style.display = 'none');
-            
-            // Y solo mostramos la fila específica de series
+            // CORRECCIÓN: SOLO mostramos la fila específica de series
             const seriesRow = findRowByTitle('Series épicas');
             if (seriesRow) {
                 seriesRow.style.display = 'block';
@@ -59,23 +57,23 @@ document.addEventListener('DOMContentLoaded', () => {
             
             document.getElementById('peliculas').style.display = 'block'; // Muestra la cuadrícula
             
-            // Ocultamos todas las filas horizontales
-            contentRows.forEach(row => row.style.display = 'none');
+            // Opcional: Mostrar la fila de 'Tendencias' en la vista de Películas también
+            const tendenciasRow = findRowByTitle('Tendencias ahora');
+            if (tendenciasRow) {
+                tendenciasRow.style.display = 'block';
+            }
             
         } else if (idVistaAMostrar === '#documentales') {
             
             document.getElementById('documentales').style.display = 'block'; 
-            contentRows.forEach(row => row.style.display = 'none');
             
         } else {
-            // Caso de fallback o búsqueda
+            // Caso de fallback o búsqueda, mostrar la cuadrícula de películas
             document.getElementById('peliculas').style.display = 'block';
         }
 
-        // Si se llama desde la búsqueda, restauramos todas las tarjetas a 'block' antes de filtrar
-        if (idVistaAMostrar !== '#inicio') {
-             document.querySelectorAll('.movie-card').forEach(tarjeta => tarjeta.style.display = 'block');
-        }
+        // Restaura todas las tarjetas a 'block' para que el filtro de búsqueda no persista
+        document.querySelectorAll('.movie-card').forEach(tarjeta => tarjeta.style.display = 'block');
     }
 
     // Ocultar todas las secciones al inicio, excepto #inicio (el banner hero)
@@ -103,92 +101,4 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (btnPlayBanner) {
         btnPlayBanner.addEventListener('click', () => {
-            // El botón principal reproduce el video de fondo (Moana.mp4)
-            window.open('peliculas/moana.mp4', '_blank'); 
-        });
-    }
-    
-    if (btnInfo) {
-        btnInfo.addEventListener('click', () => {
-            alert('Agregado a tu lista.');
-        });
-    }
-
-    // === 1.5 Lógica de Reproducción de Tarjetas ===
-    document.querySelectorAll('.movie-card').forEach(card => {
-        // Lee la URL del video del atributo data-video-url
-        const videoURL = card.getAttribute('data-video-url');
-        
-        // Selecciona todos los botones que tengan data-action="play"
-        const playButtons = card.querySelectorAll('[data-action="play"]'); 
-        
-        playButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation(); 
-                
-                if (videoURL) {
-                    window.open(videoURL, '_blank'); 
-                } else {
-                    alert('Error: La URL del video no está definida para esta película.');
-                }
-            });
-        });
-        
-        // Manejo del botón 'Mi lista'
-        const addToListButton = card.querySelector('.btn:not([data-action="play"])');
-        if (addToListButton && addToListButton.textContent.includes('Mi lista')) {
-            addToListButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const titleElement = card.querySelector('h3, h4');
-                const title = titleElement ? titleElement.textContent : "Contenido Desconocido";
-                alert(`"${title}" agregado a tu lista.`);
-            });
-        }
-    });
-
-
-    // === 2. Lógica de Búsqueda (SIMPLIFICADA Y MÁS ESTABLE) ===
-
-    const inputBusqueda = document.getElementById('search-input'); 
-    const contenedorPeliculas = secciones['#peliculas']; 
-    const todasLasTarjetas = document.querySelectorAll('.movie-card');
-    const searchButton = document.getElementById('search-button');
-
-    function filtrarPeliculas() {
-        const textoBusqueda = inputBusqueda.value.toLowerCase().trim();
-
-        if (textoBusqueda.length > 0) {
-            // 1. Mostrar la sección de Películas (la cuadrícula) y ocultar las filas de contenido
-            cambiarVista('#peliculas'); 
-            
-            // 2. Filtrar las tarjetas
-            todasLasTarjetas.forEach(tarjeta => {
-                const tituloElemento = tarjeta.querySelector('h3, h4'); 
-                if (!tituloElemento) return; 
-
-                const tituloPelicula = tituloElemento.textContent.toLowerCase();
-
-                if (tituloPelicula.includes(textoBusqueda)) {
-                    tarjeta.style.display = 'block'; 
-                } else {
-                    tarjeta.style.display = 'none';
-                }
-            });
-
-        } else {
-            // Si el campo de búsqueda está vacío, volvemos a la vista de inicio
-            cambiarVista('#inicio');
-        }
-    }
-
-    // Asignamos el evento al input (búsqueda en tiempo real)
-    inputBusqueda.addEventListener('input', filtrarPeliculas);
-    
-    // Asignamos el evento al botón de búsqueda
-    if (searchButton) {
-        searchButton.addEventListener('click', (e) => {
-             e.preventDefault(); 
-             filtrarPeliculas();
-        });
-    }
-});
+            window.
