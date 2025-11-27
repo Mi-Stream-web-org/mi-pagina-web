@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Página Web</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Películas</a></li>
+                <li><a href="#">Series</a></li>
+                <li><a href="#">Documentales</a></li>
+            </ul>
+            <div class="search-container">
+                <input type="text" placeholder="Buscar..." id="search-input">
+                <button id="search-button">🔍</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="video-container">
+            <h1>MYTHOS QUESTS: NEW HEROES RISE</h1>
+            <video controls>
+                <source src="peliculas/moana.mp4" type="video/mp4">
+                Tu navegador no soporta el formato de video.
+            </video>
+        </section>
+
+        <section class="peliculas-populares">
+            <h2>Películas Populares</h2>
+            <div class="movie">
+                <img src="imagenes/supermario.jpg" alt="Super Mario Bros">
+                <div class="movie-overlay">
+                    <button class="btn">Ver ahora</button>
+                    <button class="btn">Agregar a mi lista</button>
+                </div>
+                <h3>Super Mario Bros: The Movie</h3>
+            </div>
+
+            <div class="movie">
+                <img src="imagenes/moana.jpg" alt="Moana">
+                <div class="movie-overlay">
+                    <button class="btn">Ver ahora</button>
+                    <button class="btn">Agregar a mi lista</button>
+                </div>
+                <h3>Moana</h3>
+            </div>
+
+            <div class="movie">
+                <img src="imagenes/frozen.jpg" alt="Frozen">
+                <div class="movie-overlay">
+                    <button class="btn">Ver ahora</button>
+                    <button class="btn">Agregar a mi lista</button>
+                </div>
+                <h3>Frozen</h3>
+            </div>
+
+            <div class="movie">
+                <img src="imagenes/intensamente.jpg" alt="Intensamente">
+                <div class="movie-overlay">
+                    <button class="btn">Ver ahora</button>
+                    <button class="btn">Agregar a mi lista</button>
+                </div>
+                <h3>Intensamente</h3>
+            </div>
+
+            <div class="movie">
+                <img src="imagenes/cenicienta.jpg" alt="Cenicienta">
+                <div class="movie-overlay">
+                    <button class="btn">Ver ahora</button>
+                    <button class="btn">Agregar a mi lista</button>
+                </div>
+                <h3>Cenicienta</h3>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
