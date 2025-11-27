@@ -1,174 +1,139 @@
-document.addEventListener('DOMContentLoaded', () => {
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MYTHOS STREAMING</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <img src="imagenes/logo.png" alt="MYTHOS STREAMING" style="height: 30px;">
+            </div>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#peliculas">Películas</a></li>
+                <li><a href="#series">Series</a></li>
+                <li><a href="#documentales">Documentales</a></li>
+            </ul>
+            <div class="search-container">
+                <input type="text" placeholder="Buscar..." id="search-input">
+                <button id="search-button">🔍</button>
+            </div>
+        </div>
+    </header>
 
-    // === FUNCIONES AUXILIARES NECESARIAS PARA LA NAVEGACIÓN ===
-    
-    // Función auxiliar para buscar la fila por el título H2 (necesario para la navegación a 'Series')
-    function findRowByTitle(title) {
-        const rows = document.querySelectorAll('.content-row');
-        for (const row of rows) {
-            const h2 = row.querySelector('h2');
-            if (h2 && h2.textContent.trim() === title) {
-                return row;
-            }
-        }
-        return null;
-    }
+    <main>
+        <section id="inicio" class="banner-hero">
+            <div class="video-background">
+                <video autoplay muted loop>
+                    <source src="peliculas/moana.mp4" type="video/mp4">
+                    Tu navegador no soporta el formato de video.
+                </video>
+            </div>
 
-    // 1.2 Obtener todas las secciones principales
-    const secciones = {
-        '#inicio': document.getElementById('inicio'),
-        '#peliculas': document.getElementById('peliculas'),
-        '#series': document.getElementById('series'),
-        '#documentales': document.getElementById('documentales'),
-    };
-    
-    // Función para cambiar de vista (muestra la sección solicitada y oculta las demás)
-    function cambiarVista(idVistaAMostrar) {
-        let vistaEncontrada = false;
-        const contentRows = document.querySelectorAll('.content-row'); // Todas las filas horizontales
+            <div class="banner-content">
+                <h1 class="title">MYTHOS QUESTS: NEW HEROES RISE</h1>
+                <p class="tagline">Gods. Heroes. Monsters. An ultimate battle for control.</p>
+                <div class="banner-actions">
+                    <button class="btn btn-play">▶ Reproducir</button> 
+                    <button class="btn btn-info">ℹ️ Mi lista</button>
+                </div>
+            </div>
+        </section>
 
-        // 1. Ocultar todas las secciones de navegación y restaurar filas si es necesario
-        for (const id in secciones) {
-            const seccion = secciones[id];
-            
-            if (seccion) {
-                if (id === idVistaAMostrar) {
-                    seccion.style.display = 'block';
-                    vistaEncontrada = true;
-                } else {
-                    // Ocultar solo las secciones de cuadrícula que no son la actual
-                    if (id === '#peliculas' || id === '#series' || id === '#documentales') {
-                         seccion.style.display = 'none';
-                    }
-                }
-            }
-        }
-        
-        // 2. Lógica para mostrar/ocultar Filas de Contenido
-        if (idVistaAMostrar === '#inicio') {
-            // En Inicio, mostramos todas las filas
-            contentRows.forEach(row => row.style.display = 'block');
-        } else if (idVistaAMostrar === '#series') {
-            // En Series, ocultamos todas las filas...
-            contentRows.forEach(row => row.style.display = 'none');
-            
-            // ... excepto la fila específica de series
-            const seriesRow = findRowByTitle('Series épicas');
-            if (seriesRow) {
-                seriesRow.style.display = 'block';
-            }
-        } else if (idVistaAMostrar === '#peliculas') {
-            // En Películas, ocultamos todas las filas
-            contentRows.forEach(row => row.style.display = 'none');
-            
-            // Pero mostramos la fila de 'Tendencias' para un diseño más rico (opcional)
-            const tendenciasRow = findRowByTitle('Tendencias ahora');
-             if (tendenciasRow) {
-                tendenciasRow.style.display = 'block';
-            }
-        } else {
-            // Para Documentales o Búsqueda
-            contentRows.forEach(row => row.style.display = 'none');
-        }
-    }
-
-    // Ocultar todas las secciones al inicio, excepto #inicio (el banner hero)
-    cambiarVista('#inicio');
-
-
-    // 1.3 Asignar Eventos a los Enlaces de Navegación
-    const enlacesNavegacion = document.querySelectorAll('.navbar ul li a');
-    enlacesNavegacion.forEach(enlace => {
-        enlace.addEventListener('click', (e) => {
-            const idObjetivo = enlace.getAttribute('href');
-
-            if (idObjetivo && idObjetivo.startsWith('#')) {
-                e.preventDefault(); 
-                cambiarVista(idObjetivo);
-            }
-        });
-    });
-    
-    // 1.4 Asignar Eventos a los botones de acción del Banner Hero
-    const btnPlayBanner = document.querySelector('.banner-content .btn-play');
-    const btnInfo = document.querySelector('.btn-info');
-    
-    if (btnPlayBanner) {
-        btnPlayBanner.addEventListener('click', () => {
-            // El botón principal reproduce el video de fondo (Moana.mp4)
-            window.open('peliculas/moana.mp4', '_blank'); 
-        });
-    }
-    
-    if (btnInfo) {
-        btnInfo.addEventListener('click', () => {
-            alert('Agregado a tu lista.');
-        });
-    }
-
-    // === 1.5 Lógica de Reproducción de Tarjetas (SOLUCIÓN FINAL) ===
-    document.querySelectorAll('.movie-card').forEach(card => {
-        // Lee la URL del video del atributo data-video-url
-        const videoURL = card.getAttribute('data-video-url');
-        
-        // Selecciona todos los botones que tengan data-action="play"
-        const playButtons = card.querySelectorAll('[data-action="play"]'); 
-        
-        playButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita que el clic afecte al contenedor de la tarjeta
+        <section class="content-row">
+            <h2>Tendencias ahora</h2>
+            <div class="row-cards-container">
                 
-                if (videoURL) {
-                    // Abre el video en una nueva pestaña/ventana
-                    window.open(videoURL, '_blank'); 
-                } else {
-                    alert('Error: La URL del video no está definida para esta película.');
-                }
-            });
-        });
-        
-        // Manejo del botón 'Mi lista'
-        const addToListButton = card.querySelector('.btn:not([data-action="play"])');
-        if (addToListButton && addToListButton.textContent.includes('Mi lista')) {
-            addToListButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                alert(`"${card.querySelector('h3, h4').textContent}" agregado a tu lista.`);
-            });
-        }
-    });
+                <div class="movie-card" data-video-url="peliculas/mario-bros.mp4">
+                    <img src="imagenes/supermario.jpg" alt="Super Mario Bros">
+                    <div class="movie-overlay">
+                        <button class="btn btn-overlay" data-action="play">Ver ahora</button>
+                    </div>
+                    <h4>Heracles: The Labors</h4>
+                </div>
+                
+                <div class="movie-card" data-video-url="peliculas/moana.mp4">
+                    <img src="imagenes/moana.jpg" alt="Moana">
+                    <div class="movie-overlay">
+                        <button class="btn btn-overlay" data-action="play">Ver ahora</button>
+                    </div>
+                    <h4>Medusa's Gaze</h4>
+                </div>
+                
+                <div class="movie-card" data-video-url="peliculas/frozen.mp4">
+                    <img src="imagenes/frozen.jpg" alt="Frozen">
+                    <div class="movie-overlay">
+                        <button class="btn btn-overlay" data-action="play">Ver ahora</button>
+                    </div>
+                    <h4>Odysseus & the Sirens</h4>
+                </div>
+                
+                <div class="movie-card" data-video-url="peliculas/intensamente.mp4">
+                    <img src="imagenes/intensamente.jpg" alt="Intensamente">
+                    <div class="movie-overlay">
+                        <button class="btn btn-overlay" data-action="play">Ver ahora</button>
+                    </div>
+                    <h4>Odyssey: A King's Return</h4>
+                </div>
+                
+                <div class="movie-card" data-video-url="peliculas/cenicienta.mp4">
+                    <img src="imagenes/cenicienta.jpg" alt="Cenicienta">
+                    <div class="movie-overlay">
+                        <button class="btn btn-overlay" data-action="play">Ver ahora</button>
+                    </div>
+                    <h4>Percy Troy: The Lightning Thief</h4>
+                </div>
+            </div>
+        </section>
 
+        <section class="content-row">
+            <h2>Series épicas</h2>
+            <div class="row-cards-container">
+                
+                <div class="movie-card" data-video-url="Series/atlantis.mp4"> 
+                    <img src="imagenes/supermario.jpg" alt="Atlantis"> 
+                    <div class="movie-overlay">
+                        <button class="btn btn-overlay" data-action="play">Ver ahora</button>
+                    </div>
+                    <h4>Atlantis Rising</h4>
+                </div>
+                
+                <div class="movie-card" data-video-url="Series/minotaur.mp4">
+                    <img src="imagenes/moana.jpg" alt="Minotaurs">
+                    <div class="movie-overlay">
+                        <button class="btn btn-overlay" data-action="play">Ver ahora</button>
+                    </div>
+                    <h4>Minotaur's Maze</h4>
+                </div>
+                
+                <div class="movie-card" data-video-url="Series/Record of ragnarok.mp4">
+                    <img src="imagenes/supermario.jpg" alt="Record of Ragnarok">
+                    <div class="movie-overlay">
+                        <button class="btn btn-overlay" data-action="play">Ver ahora</button>
+                    </div>
+                    <h4>Record of Ragnarok</h4>
+                </div>
+                
+            </div>
+        </section>
 
-    // === 2. Lógica de Búsqueda ===
+        <section id="peliculas" class="peliculas-populares">
+            <h2>Películas Taquilleras</h2>
+            <div class="movies-grid"> 
+                
+                <div class="movie-card" data-video-url="peliculas/mario-bros.mp4">
+                    <img src="imagenes/supermario.jpg" alt="Clash of Titans">
+                    <div class="movie-overlay">
+                        <button class="btn" data-action="play">Ver ahora</button>
+                        <button class="btn">Mi lista</button>
+                    </div>
+                    <h3>Clash of Titans</h3>
+                </div>
 
-    const inputBusqueda = document.getElementById('search-input'); 
-    const contenedorPeliculas = secciones['#peliculas']; 
-    const todasLasTarjetas = document.querySelectorAll('.movie-card');
-    const searchButton = document.getElementById('search-button');
-
-    function filtrarPeliculas() {
-        const textoBusqueda = inputBusqueda.value.toLowerCase().trim();
-
-        if (textoBusqueda.length > 0) {
-            // 1. Mostrar la sección de Películas (la cuadrícula)
-            cambiarVista('#peliculas'); 
-            
-            // 2. Ocultar filas horizontales (excepto la fila de tendencias si la cambiamos)
-            document.querySelectorAll('.content-row').forEach(row => row.style.display = 'none');
-            
-            // 3. Asegurar que el contenedor de la cuadrícula de #peliculas esté en modo grid
-            const moviesGrid = contenedorPeliculas.querySelector('.movies-grid');
-            if (moviesGrid) moviesGrid.style.display = 'grid'; 
-
-            // 4. Filtrar las tarjetas
-            let resultadosEncontrados = false;
-            todasLasTarjetas.forEach(tarjeta => {
-                const tituloElemento = tarjeta.querySelector('h3, h4'); 
-                if (!tituloElemento) return; 
-
-                const tituloPelicula = tituloElemento.textContent.toLowerCase();
-
-                if (tituloPelicula.includes(textoBusqueda)) {
-                    tarjeta.style.display = 'block'; 
-                    // Asegurarse de que la tarjeta esté visible en su contenedor (movies-grid o row-cards-container)
-                    if(tarjeta.closest('.row-cards-container')) {
-                        tarjeta.closest('.content-row').style
+                <div class="movie-card" data-video-url="peliculas/moana.mp4">
+                    <img src="imagenes/moana
