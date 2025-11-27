@@ -35,27 +35,165 @@ nav a {
 nav a:hover {
     color: #f0f0f0;
 }
-/* --- Contenedor de Búsqueda General (NUEVO) --- */
-#contenedor-busqueda {
-    padding: 10px 20px;
-    display: flex;
-    justify-content: center; /* Centra la barra */
-    gap: 5px; /* Espacio entre el input y el botón */
-    max-width: 600px; 
-    margin: 10px auto 0; /* Centrado y espacio debajo de la navegación */
+¡Claro! Entiendo que quieres que te presente el código final de los tres archivos (.html, .css, y .js) utilizando la estructura que ya me habías proporcionado, pero con los IDs en inglés (search-input, movies, etc.) como solicitaste al final.
+
+Aquí tienes el código de cada archivo, corregido y unificado. Simplemente copia y pega el contenido en cada uno de tus archivos para que la búsqueda funcione.
+
+1. 📝 Código HTML Final (index.html)
+Tu código HTML es el que menos cambios necesita, ya que la mayoría de tus IDs ya estaban en inglés. He asegurado que todos los IDs relacionados con la búsqueda y las películas estén configurados correctamente.
+
+HTML
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERVIDOR STREAMING</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+        <header>
+        <nav>
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Series</a></li>
+                <li><a href="#">Películas</a></li>
+                <li><a href="#">Documentales</a></li>
+            </ul>
+        </nav>
+        <div id="search-container">
+            <input type="text" id="search-input" placeholder="Buscar películas, series o documentales...">
+            <button id="search-button">🔍</button>
+        </div>
+    </header>
+
+        <section id="banner">
+        <h1>Enredados</h1>
+        <div id="video-player">
+            <video controls>
+                <source src="peliculas/enredados.mp4" type="video/mp4">
+                Tu navegador no soporta el video.
+            </video>
+        </div>
+    </section>
+
+        <section id="movies">
+        <h2>Películas Populares</h2>
+
+                <div class="movie-card">
+            <img src="imagenes/mario-bros.jpg" alt="Super Mario Bros: The Movie">
+            <div class="movie-info">
+                <h3>Super Mario Bros: The Movie</h3>
+                <a href="peliculas/mario-bros.mp4" target="_blank">Ver ahora</a>
+            </div>
+        </div>
+
+                <div class="movie-card">
+            <img src="imagenes/moana.jpg" alt="Moana">
+            <div class="movie-info">
+                <h3>Moana</h3>
+                <a href="peliculas/moana.mp4" target="_blank">Ver ahora</a>
+            </div>
+        </div>
+
+                <div class="movie-card">
+            <img src="imagenes/frozen.jpg" alt="Frozen">
+            <div class="movie-info">
+                <h3>Frozen</h3>
+                <a href="peliculas/frozen.mp4" target="_blank">Ver ahora</a>
+            </div>
+        </div>
+
+                <div class="movie-card">
+            <img src="imagenes/intensamente.jpg" alt="Intensamente">
+            <div class="movie-info">
+                <h3>Intensamente</h3>
+                <a href="peliculas/intensamente.mp4" target="_blank">Ver ahora</a>
+            </div>
+        </div>
+
+                <div class="movie-card">
+            <img src="imagenes/cenicienta.jpg" alt="Cenicienta">
+            <div class="movie-info">
+                <h3>Cenicienta</h3>
+                <a href="peliculas/cenicienta.mp4" target="_blank">Ver ahora</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Servidor Streaming</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+2. 🎨 Código CSS Final (styles.css)
+Este CSS está unificado y usa solo IDs en inglés (#search-input, #movies, #profiles) para que coincida con tu HTML.
+
+CSS
+
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Campo de Entrada (Input) (NUEVO) */
-#input-busqueda {
-    padding: 10px 15px;
-    width: 100%;
-    border: 2px solid #333; 
-    border-radius: 20px; /* Bordes redondeados */
-    background-color: #222; 
-    color: white;
-    font-size: 16px;
-    outline: none; 
-    transition: border-color 0.3s;
+/* Barra de navegación */
+header {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    list-style: none;
+    padding: 0;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+nav a:hover {
+    color: #f0f0f0;
+}
+
+
+#search-container {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    max-width: 600px;
+    margin: 10px auto 0;
+}
+
+
+#search-input {
+    padding: 10px 15px;
+    width: 100%;
+    border: 2px solid #333;
+    border-radius: 20px;
+    background-color: #222;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
 }
 
 #input-busqueda::placeholder {
@@ -66,25 +204,24 @@ nav a:hover {
     border-color: #ffbc00; /* Borde de acento al enfocar */
 }
 
-/* Botón de Búsqueda (NUEVO) */
-#boton-busqueda {
-    padding: 10px 15px;
-    background-color: #ffbc00;
-    color: #121212; 
-    border: none;
-    border-radius: 20px; 
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
 
+#search-button {
+    padding: 10px 15px;
+    background-color: #ffbc00;
+    color: #121212;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
 #boton-busqueda:hover {
     background-color: #f9a800; 
 }
 
 
-/* Banner de contenido */
+
 #banner {
     padding: 60px;
     text-align: center;
@@ -239,4 +376,5 @@ button:hover {
     border: none;
     width: 100%;
 }
+
 
