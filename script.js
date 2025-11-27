@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-
+    // 1. Obtener los elementos clave del DOM usando sus IDs en inglés
     const inputBusqueda = document.getElementById('search-input'); 
     const contenedorPeliculas = document.getElementById('movies');
 
@@ -8,13 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-
+    // Selecciona todas las tarjetas de películas
     const tarjetasPeliculas = contenedorPeliculas.querySelectorAll('.movie-card');
 
-
+    // 2. Definir la función de filtrado
     function filtrarPeliculas() {
-   
+        // Obtener el texto escrito por el usuario (limpio y en minúsculas)
         const textoBusqueda = inputBusqueda.value.toLowerCase().trim();
+
         // Iterar sobre cada tarjeta de película
         tarjetasPeliculas.forEach(tarjeta => {
             // Obtener el título de la película (h3 dentro de .movie-info)
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const tituloPelicula = tituloElemento.textContent.toLowerCase();
 
-         
+            // 3. Lógica de Filtrado
             if (tituloPelicula.includes(textoBusqueda)) {
                 // Muestra la tarjeta 
                 tarjeta.style.display = ''; 
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-   
+    // 4. Asignar el evento a la barra de búsqueda
+    // Se ejecuta con cada tecla presionada.
     inputBusqueda.addEventListener('input', filtrarPeliculas);
 });
