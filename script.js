@@ -2,11 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === FUNCIONES AUXILIARES NECESARIAS PARA LA NAVEGACIÓN ===
     
-    // Función auxiliar para buscar la fila por el título H2 (necesario para la navegación a 'Series')
+    // Función auxiliar para buscar la fila por el título H2 (crucial para la navegación a 'Series')
     function findRowByTitle(title) {
         const rows = document.querySelectorAll('.content-row');
         for (const row of rows) {
             const h2 = row.querySelector('h2');
+            // Nota: Usamos .trim() para asegurar que no haya espacios extra en el título
             if (h2 && h2.textContent.trim() === title) {
                 return row;
             }
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
 
-    // 1.2 Obtener todas las secciones principales
+    // 1.2 Obtener todas las secciones principales por su ID
     const secciones = {
         '#inicio': document.getElementById('inicio'),
         '#peliculas': document.getElementById('peliculas'),
@@ -24,51 +25,58 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Función para cambiar de vista (muestra la sección solicitada y oculta las demás)
     function cambiarVista(idVistaAMostrar) {
-        let vistaEncontrada = false;
+        
         const contentRows = document.querySelectorAll('.content-row'); // Todas las filas horizontales
 
-        // 1. Ocultar todas las secciones de navegación y restaurar filas si es necesario
+        // 1. Ocultar todas las secciones principales y de navegación
         for (const id in secciones) {
             const seccion = secciones[id];
-            
             if (seccion) {
-                if (id === idVistaAMostrar) {
-                    seccion.style.display = 'block';
-                    vistaEncontrada = true;
-                } else {
-                    // Ocultar solo las secciones de cuadrícula que no son la actual
-                    if (id === '#peliculas' || id === '#series' || id === '#documentales') {
-                         seccion.style.display = 'none';
-                    }
-                }
+                seccion.style.display = 'none';
             }
         }
+
+        // 2. Control de visibilidad de las Filas de Contenido y Secciones
         
-        // 2. Lógica para mostrar/ocultar Filas de Contenido
         if (idVistaAMostrar === '#inicio') {
-            // En Inicio, mostramos todas las filas
+            // En Inicio, mostramos todas las filas horizontales
+            document.getElementById('inicio').style.display = 'block';
             contentRows.forEach(row => row.style.display = 'block');
+            
         } else if (idVistaAMostrar === '#series') {
-            // En Series, ocultamos todas las filas...
+            
+            document.getElementById('series').style.display = 'block'; 
+            
+            // Ocultamos todas las filas horizontales primero
             contentRows.forEach(row => row.style.display = 'none');
             
-            // ... excepto la fila específica de series
+            // Y solo mostramos la fila específica de series
             const seriesRow = findRowByTitle('Series épicas');
             if (seriesRow) {
                 seriesRow.style.display = 'block';
             }
+            
         } else if (idVistaAMostrar === '#peliculas') {
-            // En Películas, ocultamos todas las filas
+            
+            document.getElementById('peliculas').style.display = 'block'; // Muestra la cuadrícula
+            
+            // Ocultamos todas las filas horizontales (excepto las que ya están en la cuadrícula)
             contentRows.forEach(row => row.style.display = 'none');
             
-            // Pero mostramos la fila de 'Tendencias' para un diseño más rico (opcional)
-            const tendenciasRow = findRowByTitle('Tendencias ahora');
-             if (tendenciasRow) {
-                tendenciasRow.style.display = 'block';
-            }
-        } else {
-            // Para Documentales o Búsqueda
+            // Opcional: Si quieres que la fila de "Tendencias ahora" aparezca también aquí:
+            // const tendenciasRow = findRowByTitle('Tendencias ahora');
+            // if (tendenciasRow) {
+            //     tendenciasRow.style.display = 'block';
+            // }
+            
+        } else if (idVistaAMostrar === '#documentales') {
+            
+            document.getElementById('documentales').style.display = 'block'; 
             contentRows.forEach(row => row.style.display = 'none');
+            
+        } else {
+            // Caso de fallback o búsqueda
+            document.getElementById('peliculas').style.display = 'block';
         }
     }
 
@@ -106,69 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === 1.5 Lógica de Reproducción de Tarjetas (SOLUCIÓN FINAL) ===
+    // === 1.5 Lógica de Reproducción de Tarjetas ===
     document.querySelectorAll('.movie-card').forEach(card => {
         // Lee la URL del video del atributo data-video-url
         const videoURL = card.getAttribute('data-video-url');
         
         // Selecciona todos los botones que tengan data-action="play"
-        const playButtons = card.querySelectorAll('[data-action="play"]'); 
-        
-        playButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evita que el clic afecte al contenedor de la tarjeta
-                
-                if (videoURL) {
-                    // Abre el video en una nueva pestaña/ventana
-                    window.open(videoURL, '_blank'); 
-                } else {
-                    alert('Error: La URL del video no está definida para esta película.');
-                }
-            });
-        });
-        
-        // Manejo del botón 'Mi lista'
-        const addToListButton = card.querySelector('.btn:not([data-action="play"])');
-        if (addToListButton && addToListButton.textContent.includes('Mi lista')) {
-            addToListButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                alert(`"${card.querySelector('h3, h4').textContent}" agregado a tu lista.`);
-            });
-        }
-    });
-
-
-    // === 2. Lógica de Búsqueda ===
-
-    const inputBusqueda = document.getElementById('search-input'); 
-    const contenedorPeliculas = secciones['#peliculas']; 
-    const todasLasTarjetas = document.querySelectorAll('.movie-card');
-    const searchButton = document.getElementById('search-button');
-
-    function filtrarPeliculas() {
-        const textoBusqueda = inputBusqueda.value.toLowerCase().trim();
-
-        if (textoBusqueda.length > 0) {
-            // 1. Mostrar la sección de Películas (la cuadrícula)
-            cambiarVista('#peliculas'); 
-            
-            // 2. Ocultar filas horizontales (excepto la fila de tendencias si la cambiamos)
-            document.querySelectorAll('.content-row').forEach(row => row.style.display = 'none');
-            
-            // 3. Asegurar que el contenedor de la cuadrícula de #peliculas esté en modo grid
-            const moviesGrid = contenedorPeliculas.querySelector('.movies-grid');
-            if (moviesGrid) moviesGrid.style.display = 'grid'; 
-
-            // 4. Filtrar las tarjetas
-            let resultadosEncontrados = false;
-            todasLasTarjetas.forEach(tarjeta => {
-                const tituloElemento = tarjeta.querySelector('h3, h4'); 
-                if (!tituloElemento) return; 
-
-                const tituloPelicula = tituloElemento.textContent.toLowerCase();
-
-                if (tituloPelicula.includes(textoBusqueda)) {
-                    tarjeta.style.display = 'block'; 
-                    // Asegurarse de que la tarjeta esté visible en su contenedor (movies-grid o row-cards-container)
-                    if(tarjeta.closest('.row-cards-container')) {
-                        tarjeta.closest('.content-row').style
+        const play
