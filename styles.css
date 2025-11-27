@@ -1,0 +1,97 @@
+/* Estilos para la barra de navegación */
+header {
+    background-color: #000;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Estilos del buscador */
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-input {
+    padding: 8px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-button {
+    padding: 8px 12px;
+    background-color: #FF9900;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #FF6600;
+}
+
+/* Estilos de las películas */
+#movies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 20px;
+}
+
+.movie-card {
+    background-color: #222;
+    padding: 15px;
+    border-radius: 8px;
+    width: 200px;
+    text-align: center;
+}
+
+.movie-card img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.movie-card .movie-info {
+    margin-top: 10px;
+}
+
+.movie-card .movie-info a {
+    color: #FF9900;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.movie-card .movie-info a:hover {
+    color: #FF6600;
+}
+
+/* Estilo del pie de página */
+footer {
+    background-color: #000;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
